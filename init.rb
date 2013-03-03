@@ -9,7 +9,7 @@ Redmine::Plugin.register :redmine_daily_status do
   author_url 'https://github.com/gs-lab/redmine_daily_status'
 
   project_module :daily_status do
-    permission :view_daily_status,   :daily_statuses => [ :index, :show]
+    permission :view_daily_status,   :daily_statuses => :index
     permission :manage_daily_status, :daily_statuses => :save
   end
  
