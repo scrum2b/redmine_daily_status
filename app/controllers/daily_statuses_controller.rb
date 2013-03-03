@@ -5,7 +5,15 @@ class DailyStatusesController < ApplicationController
 
   def index
     @daily_statuses = @project.daily_statuses.select('id, created_at')
-    @daily_status   = DailyStatus.where(:id => params[:id]).first
+
+    unless params[:days_ago].blank?
+      days = params[:days_ago].to_s.to_i
+      if days > 0
+        @daily_status = DailyStatus.ago days, @project.id
+        flash[:notice] = "#{days} days ago status not available." unless @daily_status
+      end
+    end
+
     @daily_status ||= @project.daily_statuses.first
     @daily_status ||= @project.daily_statuses.build
   end

@@ -4,7 +4,7 @@ module DailyStatusMailer
   def todays_daily_status(daily_status)
     redmine_headers 'X-Project' => daily_status.project.identifier
 
-    subject "[#{daily_status.project.name} Daily Status]"
+    subject "#{daily_status.project.name} Daily Status"
 
     body :daily_status => daily_status, :daily_status_url => "/projects/#{daily_status.project.identifier}/daily_status/#{daily_status.id}"
     render_multipart('daily_status_added', body)
