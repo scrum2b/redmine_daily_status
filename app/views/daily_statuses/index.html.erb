@@ -1,0 +1,34 @@
+<div>
+  <div style="float:left">
+    <h3>Today's Daily Status</h3>
+  </div>
+  <div style="float:right">
+    <% if User.current.allowed_to?(:manage_daily_status, @project) %>
+      <a href="#" accesskey="e" class="icon icon-edit" onclick="$('#daily_status_content_form').show();$('#daily_status_content_show').hide();">Update</a>
+    <%end%>
+  </div>
+</div>
+<div style="clear: both;"></div>
+
+<div id="daily_status_content_show" class="wiki wiki-page">
+  <%= textilizable @daily_status.content %>
+</div>
+
+<% if User.current.allowed_to?(:manage_daily_status, @project) %>
+  <div id="daily_status_content_form" class="box" style="display:none">
+    <%= form_for(@daily_status, :url => "/projects/#{@project.identifier}/daily_status", :html => { :method => :post}) do |f| %>
+      <p>
+        <span id="daily_status_content_and_toolbar">
+          <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"><%= @daily_status.content %></textarea>
+        </span>
+      </p>
+      <%= wikitoolbar_for 'daily_status_content' %>
+      <input name="update" type="submit" value="Update"/>
+      <input type="button" value="Cancel" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();"/>
+    <% end %>
+  <% end %>
+</div>
+
+<% content_for :sidebar do %>
+<% end %>
+
