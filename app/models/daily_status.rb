@@ -10,9 +10,9 @@ class DailyStatus < ActiveRecord::Base
   end
 
   def title
-    return "Today's Status" if created_at.today?
-    return "Yesterday's Status" if created_at.yesterday?
-    "Status on #{created_at.strftime('%b %-d')}"
+    #return "Today's Status" if created_at.today?
+    #return "Yesterday's Status" if created_at.yesterday?
+    #{}"Status on #{created_at.strftime('%b %-d')}"
   end
 
   def self.on time, project_id
