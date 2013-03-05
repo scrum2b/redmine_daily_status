@@ -33,14 +33,51 @@
 
 <% content_for :sidebar do %>
   <br/>
+  <h4>Current Week</h4>
   <ul>
-    <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=0">Today, <%=(Time.now).strftime('%b %-d')%></a></li>
-    <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=1">Yesterday, <%=(Time.now-1.day).strftime('%b %-d')%></a></li>
+    <% today_date = Date.today
+    week_beginning_date = today_date.at_beginning_of_week
+    while (today_date - week_beginning_date).to_i  >= 0 do 
+      days_ago = (today_date - week_beginning_date).to_i 
+      if days_ago!=0
+    %>
+        <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=<%=days_ago%>"><%=week_beginning_date.strftime("%A") %></a></li>
+      <% else %>
+        <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=0">Today</a></li>
+      <% end %>  
+     <%  week_beginning_date = week_beginning_date+1 
+    end %>
+     </ul>
+    <!--<li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=0">Today, <%=(Time.now).strftime('%b %-d')%></a></li>
+    <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=1">Yesterday, <%=(Time.now-1.day).strftime('%b %-d')%></a></li>-->
     <br/>
     <h4>History</h4>
-    <% 3.upto(10) do |i| %>
+   <!-- <% 3.upto(10) do |i| %>
       <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=<%=i%>"><%= (Time.now-i.days).strftime('%b %-d') %></a></li>
-    <%end%>
-  </ul>
+    <%end%>  --> 
+ <div id="datepicker"></div>
 <% end %>
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'daily_status', :plugin => 'redmine_daily_status' %>
+<% end %>
+<script>
+$(function() {
+var todaysdate = new Date();
+var qs = getQueryStrings();
+if(qs["days_ago"] != undefined)
+  var days_ago = qs["days_ago"];
+else
+  var days_ago = 0;
 
+var SelectedDates = {};
+var newselecteddate = getNewCalandarDate(todaysdate,days_ago);
+$( "#datepicker" ).datepicker({ maxDate: "0" ,  onSelect: function(dateText, inst) { 
+      var dateAsString = dateText; //the first parameter of this function
+      var selecteddate = $(this).datepicker( 'getDate' ); //the getDate method
+      location.href = "/projects/<%=@project.identifier%>/daily_status?days_ago="+dateDiff(selecteddate , todaysdate)
+   }
+ });
+//$( "#datepicker" ).datepicker( "option", "defaultDate", newselecteddate);
+$('#datepicker').datepicker('setDate', newselecteddate);
+});
+</script>

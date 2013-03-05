@@ -1,14 +1,10 @@
 class DailyStatusesController < ApplicationController
   unloadable
   
-  require 'active_support/all'
-
   before_filter :find_project, :authorize
 
   def index
-    puts Time.now.all_week()
     @daily_statuses = @project.daily_statuses.select('id, created_at')
-
     unless params[:days_ago].blank?
       days = params[:days_ago].to_s.to_i
       if days > 0
