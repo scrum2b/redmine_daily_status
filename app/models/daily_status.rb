@@ -1,3 +1,4 @@
+require 'daily_status_mailer'
 class DailyStatus < ActiveRecord::Base
   unloadable
   default_scope order('created_at desc')
@@ -6,7 +7,7 @@ class DailyStatus < ActiveRecord::Base
   before_create
 
   def email_all
-    #Mailer.todays_daily_status(self)
+    DailyStatusMailer.send_daily_status(self).deliver
   end
 
   def title

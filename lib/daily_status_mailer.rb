@@ -1,26 +1,12 @@
-require 'dispatcher'
+class DailyStatusMailer < ActionMailer::Base
 
-module DailyStatusMailer
-  def todays_daily_status(daily_status)
-    redmine_headers 'X-Project' => daily_status.project.identifier
+  default :sender => 'admin@redmine.com'
+  default :content_type => "text/html"
 
-    subject "#{daily_status.project.name} Daily Status"
-
-    body :daily_status => daily_status, :daily_status_url => "/projects/#{daily_status.project.identifier}/daily_status/#{daily_status.id}"
-    render_multipart('daily_status_added', body)
-  end
-
-  def self.included(receiver)
-    receiver.send :include, InstanceMethods
-    receiver.class_eval do
-      unloadable
-      self.instance_variable_get("@inheritable_attributes")[:view_paths] << RAILS_ROOT + "/vendor/plugins/redmine_contacts/app/views"
-    end
-  end
-end
-
-Dispatcher.to_prepare do
-  unless Mailer.included_modules.include?(DailyStatusMailer)
-    Mailer.send(:include, DailyStatusMailer)
+  def send_daily_status(daily_status)
+    @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
+    @project_name = daily_status.project.name
+    @daily_status_content = daily_status.content
+    mail(:to => @recipients, :subject => "Daily Status : "+daily_status.project.name)
   end
 end

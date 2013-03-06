@@ -30,3 +30,4 @@ module DailyStatusProjectPatch
 end
 
 Project.send(:include, DailyStatusProjectPatch)
+require 'daily_status_mailer'

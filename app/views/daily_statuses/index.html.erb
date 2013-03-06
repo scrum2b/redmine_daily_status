@@ -1,11 +1,11 @@
 <br/>
 <div>
-  <div style="float:left">
+  <div style="float:left" id="daily_status_project_name_header">
     <h3>Project Status on <%=(@daily_status.created_at).strftime('%b %-d')%></h3>
   </div>
   <div style="float:right">
     <% if User.current.allowed_to?(:manage_daily_status, @project) %>
-      <a href="#" accesskey="e" class="icon icon-edit" onclick="$('#daily_status_content_form').show();$('#daily_status_content_show').hide();">Update</a>
+      <a href="#" accesskey="e" class="icon icon-add" onClick="$('#daily_status_content_form').show();$('#daily_status_content_show').hide();$('#daily_status_project_name_header').hide();">Add/Update Today's Status</a>
     <%end%>
   </div>
 </div>
@@ -16,11 +16,11 @@
 </div>
 
 <% if User.current.allowed_to?(:manage_daily_status, @project) %>
-  <div id="daily_status_content_form" class="box" style="display:none">
+  <div id="daily_status_content_form" class="box" style='display:none;'>
     <%= form_for(@daily_status, :url => "/projects/#{@project.identifier}/daily_status", :html => { :method => :post}) do |f| %>
       <p>
         <span id="daily_status_content_and_toolbar">
-          <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"><%= @daily_status.content %></textarea>
+          <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"></textarea>
         </span>
       </p>
       <%= wikitoolbar_for 'daily_status_content' %>
@@ -28,33 +28,31 @@
       <input name="update" type="submit" value="Update"/>
       <input type="button" value="Cancel" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();"/>
     <% end %>
-  <% end %>
 </div>
-
+<%end%>
 <% content_for :sidebar do %>
   <br/>
   <h4>Current Week</h4>
-  <ul>
+<ul>
     <% today_date = Date.today
-    week_beginning_date = today_date.at_beginning_of_week
-    while (today_date - week_beginning_date).to_i  >= 0 do 
-      days_ago = (today_date - week_beginning_date).to_i 
-      if days_ago!=0
-    %>
-        <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=<%=days_ago%>"><%=week_beginning_date.strftime("%A") %></a></li>
-      <% else %>
-        <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=0">Today</a></li>
-      <% end %>  
-     <%  week_beginning_date = week_beginning_date+1 
-    end %>
-     </ul>
-    <!--<li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=0">Today, <%=(Time.now).strftime('%b %-d')%></a></li>
-    <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=1">Yesterday, <%=(Time.now-1.day).strftime('%b %-d')%></a></li>-->
+      week_beginning_date = today_date.at_beginning_of_week
+      liblock = ""
+      todayliblock = ""
+      while (today_date - week_beginning_date).to_i  >= 0 do 
+          days_ago = (today_date - week_beginning_date).to_i 
+            if days_ago==0      
+              todayliblock = '<li><a href="/projects/'+@project.identifier+'/daily_status?days_ago=0">Today</a></li>'          
+            else
+              liblock += '<li><a href="/projects/'+@project.identifier+'/daily_status?days_ago='+days_ago.to_s+'">'+week_beginning_date.strftime("%A")+'</a></li>'
+            end  
+          week_beginning_date = week_beginning_date+1 
+      end 
+    %> 
+          <%= (todayliblock+liblock).html_safe %>
+    
+</ul>
     <br/>
     <h4>History</h4>
-   <!-- <% 3.upto(10) do |i| %>
-      <li><a href="/projects/<%=@project.identifier%>/daily_status?days_ago=<%=i%>"><%= (Time.now-i.days).strftime('%b %-d') %></a></li>
-    <%end%>  --> 
  <div id="datepicker"></div>
 <% end %>
 <% content_for :header_tags do %>
@@ -64,20 +62,20 @@
 $(function() {
 var todaysdate = new Date();
 var qs = getQueryStrings();
-if(qs["days_ago"] != undefined)
-  var days_ago = qs["days_ago"];
-else
-  var days_ago = 0;
+    if(qs["days_ago"] != undefined)
+      var days_ago = qs["days_ago"];
+    else
+      var days_ago = 0;
 
 var SelectedDates = {};
 var newselecteddate = getNewCalandarDate(todaysdate,days_ago);
-$( "#datepicker" ).datepicker({ maxDate: "0" ,  onSelect: function(dateText, inst) { 
-      var dateAsString = dateText; //the first parameter of this function
-      var selecteddate = $(this).datepicker( 'getDate' ); //the getDate method
-      location.href = "/projects/<%=@project.identifier%>/daily_status?days_ago="+dateDiff(selecteddate , todaysdate)
-   }
- });
-//$( "#datepicker" ).datepicker( "option", "defaultDate", newselecteddate);
-$('#datepicker').datepicker('setDate', newselecteddate);
+    $( "#datepicker" ).datepicker({ maxDate: "0" , defaultDate: new Date(),  onSelect: function(dateText, inst) { 
+          var dateAsString = dateText; //the first parameter of this function
+          var selecteddate = $(this).datepicker( 'getDate' ); //the getDate method
+          location.href = "/projects/<%=@project.identifier%>/daily_status?days_ago="+dateDiff(selecteddate , todaysdate)
+       }
+     });
+  $( "#datepicker" ).datepicker( "option", "defaultDate", newselecteddate);
+  $('#datepicker').datepicker('setDate', newselecteddate);
 });
 </script>
