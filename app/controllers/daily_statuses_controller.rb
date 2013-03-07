@@ -15,6 +15,8 @@ class DailyStatusesController < ApplicationController
       end
     end
 
+    daily_status_model_obj =  DailyStatus.new
+    @todays_status  = daily_status_model_obj.getTodaysStatus @project.id
     @daily_status ||= @project.daily_statuses.first
     @daily_status ||= @project.daily_statuses.build
   end
@@ -26,9 +28,14 @@ class DailyStatusesController < ApplicationController
     @daily_status ||= @project.daily_statuses.build
 
     @daily_status.content = params[:daily_status][:content]
+      if !params[:daily_status][:isEmailSent].nil?
+        @daily_status.isEmailSent = params[:daily_status][:isEmailSent]
+      else
+        @daily_status.isEmailSent = 0
+      end  
     if @daily_status.save
       flash[:notice] = 'Status Saved'
-      if !params['email'].nil?
+      if !params[:daily_status]['isEmailSent'].nil?
         if @daily_status.email_all
           flash[:notice] << ', and mail has been sent to all members.' 
         end  
@@ -37,7 +44,8 @@ class DailyStatusesController < ApplicationController
       flash[:notice] = @daily_status.errors.full_messages[0]
     end
     
-    render :index
+    #render :index
+    redirect_to({ :action => 'index'});
   end
 
   private

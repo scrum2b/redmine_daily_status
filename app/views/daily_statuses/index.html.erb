@@ -1,7 +1,15 @@
 <br/>
 <div>
   <div style="float:left" id="daily_status_project_name_header">
-    <h3>Project Status on <%=(@daily_status.created_at).strftime('%b %-d')%></h3>
+    <% if !@daily_status.nil? %>
+        <% if !@daily_status.created_at.nil? %>
+            <h3>Project Status on <%=(@daily_status.created_at).strftime('%b %-d')%></h3>
+        <%else%>
+            <h3>Project Status on <%=(Date.today).strftime('%b %-d')%></h3>
+        <%end%>
+    <%else%>
+      <h3>Project Status on <%=(Date.today).strftime('%b %-d')%></h3>
+    <%end%>
   </div>
   <div style="float:right">
     <% if User.current.allowed_to?(:manage_daily_status, @project) %>
@@ -12,7 +20,15 @@
 
 <br/><br/>
 <div id="daily_status_content_show" class="wiki wiki-page">
-  <%= textilizable @daily_status.content %>
+  <% if !@daily_status.nil? %>
+      <% if !@daily_status.content.nil? %>
+        <%= textilizable @daily_status.content %>
+       <%else%>
+        <%= textilizable "No status available"%>
+       <%end%>
+  <%else%>
+    <%= textilizable "No status available"%>
+  <%end%>  
 </div>
 
 <% if User.current.allowed_to?(:manage_daily_status, @project) %>
@@ -20,13 +36,22 @@
     <%= form_for(@daily_status, :url => "/projects/#{@project.identifier}/daily_status", :html => { :method => :post}) do |f| %>
       <p>
         <span id="daily_status_content_and_toolbar">
-          <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"></textarea>
+          <% if !@todays_status.nil? %>                 
+              <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"><%= @todays_status.content %></textarea>
+          <%else%>
+              <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"></textarea>
+          <%end%>
         </span>
       </p>
       <%= wikitoolbar_for 'daily_status_content' %>
-      <div style="padding-bottom:10px"><input type='checkbox' name="email" value=1 /> Send Email to Members</div>
+      <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[isEmailSent]" value=1 /> Send Email to Members</div>
+      <% if !@todays_status.nil? %>
+            <% if @todays_status.isEmailSent %>
+              <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div>Email already sent for today's this update.</div>
+            <%end%>
+      <%end%>           
       <input name="update" type="submit" value="Update"/>
-      <input type="button" value="Cancel" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();"/>
+      <input type="button" value="Cancel" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();$('#daily_status_project_name_header').show();"/>
     <% end %>
 </div>
 <%end%>
@@ -54,6 +79,9 @@
     <br/>
     <h4>History</h4>
  <div id="datepicker"></div>
+<% end %>
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag 'daily_status', :plugin => 'redmine_daily_status' %>
 <% end %>
 <% content_for :header_tags do %>
     <%= javascript_include_tag 'daily_status', :plugin => 'redmine_daily_status' %>

@@ -1,0 +1,16 @@
+.daily_status_email_checkbox {
+    padding-bottom:10px;
+    float:right;
+}
+.daily_status_email_notification_text {
+    padding-bottom:10px;
+    padding-right:10px;
+    float:right;
+    color:red;
+}
+.daily_status_note {
+    padding-bottom:10px;
+    padding-right:2px;
+    float:left;
+    color:black;
+}

@@ -3,8 +3,7 @@ class DailyStatus < ActiveRecord::Base
   unloadable
   default_scope order('created_at desc')
   belongs_to :project
-
-  before_create
+  validates_presence_of :content
 
   def email_all
     DailyStatusMailer.send_daily_status(self).deliver
@@ -22,5 +21,10 @@ class DailyStatus < ActiveRecord::Base
 
   def self.ago number_of, project_id
     on Time.now-number_of.days, project_id
+  end
+
+  def getTodaysStatus project_id
+    DailyStatus.where(:project_id => project_id).where("created_at >= ? and created_at <= ?", Date.today.beginning_of_day, Date.today.end_of_day).first
+    #where(:project_id => project_id).where(:created_at => ((time.to_date)+' 00:00:00')..((time.to_date)+' 23:59:59'))
   end
 end
