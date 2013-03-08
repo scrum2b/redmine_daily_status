@@ -44,9 +44,9 @@
         </span>
       </p>
       <%= wikitoolbar_for 'daily_status_content' %>
-      <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[isEmailSent]" value=1 /> Send Email to Members</div>
+      <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /> Send Email to Members</div>
       <% if !@todays_status.nil? %>
-            <% if @todays_status.isEmailSent %>
+            <% if @todays_status.is_email_sent %>
               <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div>Email already sent for today's this update.</div>
             <%end%>
       <%end%>           
@@ -58,22 +58,19 @@
 <% content_for :sidebar do %>
   <br/>
   <h4>Current Week</h4>
-<ul>
+<ul class="daily_status_current_week">
     <% today_date = Date.today
       week_beginning_date = today_date.at_beginning_of_week
       liblock = ""
       todayliblock = ""
       while (today_date - week_beginning_date).to_i  >= 0 do 
           days_ago = (today_date - week_beginning_date).to_i 
-            if days_ago==0      
-              todayliblock = '<li><a href="/projects/'+@project.identifier+'/daily_status?days_ago=0">Today</a></li>'          
-            else
-              liblock += '<li><a href="/projects/'+@project.identifier+'/daily_status?days_ago='+days_ago.to_s+'">'+week_beginning_date.strftime("%A")+'</a></li>'
-            end  
+          liblock += '<li><a href="/projects/'+@project.identifier+'/daily_status?days_ago='+days_ago.to_s+'">'+week_beginning_date.strftime("%a")+'</a>&nbsp;|&nbsp;</li>'
           week_beginning_date = week_beginning_date+1 
-      end 
-    %> 
-          <%= (todayliblock+liblock).html_safe %>
+      end
+      *a, b = liblock.split('|&nbsp;', -1)
+      %> 
+          <%= (a.join('|&nbsp;')+'&nbsp;'+b).html_safe %>
     
 </ul>
     <br/>

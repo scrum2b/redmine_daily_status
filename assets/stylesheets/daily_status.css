@@ -14,3 +14,12 @@
     float:left;
     color:black;
 }
+.daily_status_current_week {
+    list-style: none;
+    padding: 2px;
+
+}
+.daily_status_current_week li {
+    float:left;
+    padding-right: 2px;    
+}

@@ -28,14 +28,14 @@ class DailyStatusesController < ApplicationController
     @daily_status ||= @project.daily_statuses.build
 
     @daily_status.content = params[:daily_status][:content]
-      if !params[:daily_status][:isEmailSent].nil?
-        @daily_status.isEmailSent = params[:daily_status][:isEmailSent]
+      if !params[:daily_status][:is_email_sent].nil?
+        @daily_status.is_email_sent = params[:daily_status][:is_email_sent]
       else
-        @daily_status.isEmailSent = 0
+        @daily_status.is_email_sent = 0
       end  
     if @daily_status.save
       flash[:notice] = 'Status Saved'
-      if !params[:daily_status]['isEmailSent'].nil?
+      if !params[:daily_status]['is_email_sent'].nil?
         if @daily_status.email_all
           flash[:notice] << ', and mail has been sent to all members.' 
         end  
