@@ -49,3 +49,9 @@ function getNewCalandarDate(date,days_ago)
     )
     return selecteddate;  
 }
+
+function add_Class_To_Selected_Date()
+{
+  $('.ui-datepicker-calendar tr td a.ui-state-default.ui-state-highlight').removeClass('ui-state-highlight');
+  $('.ui-datepicker-calendar tr td a.ui-state-default.ui-state-active').addClass('ui-state-highlight').removeClass('ui-state-active');
+}
