@@ -1,5 +1,8 @@
 <br/>
 <div>
+  <% if params[:days_ago].to_s.to_i == 0 && @todays_status.nil? %>
+      <h4><%= textilizable "No status available for today."%></h4>
+  <%end%> 
   <div style="float:left" id="daily_status_project_name_header">
     <% if !@daily_status.nil? %>
         <% if !@daily_status.created_at.nil? %>
@@ -11,23 +14,22 @@
       <h3>Project Status on <%=(Date.today).strftime('%b %-d')%></h3>
     <%end%>
   </div>
-  <div style="float:right">
+   <div style="float:right">
     <% if User.current.allowed_to?(:manage_daily_status, @project) %>
       <a href="#" accesskey="e" class="icon icon-add" onClick="$('#daily_status_content_form').show();$('#daily_status_content_show').hide();$('#daily_status_project_name_header').hide();">Add/Update Today's Status</a>
     <%end%>
   </div>
 </div>
-
 <br/><br/>
 <div id="daily_status_content_show" class="wiki wiki-page">
   <% if !@daily_status.nil? %>
       <% if !@daily_status.content.nil? %>
-        <%= textilizable @daily_status.content %>
+          <%= textilizable @daily_status.content %>  
        <%else%>
-        <%= textilizable "No status available"%>
+        <%= textilizable "No status available."%>
        <%end%>
   <%else%>
-    <%= textilizable "No status available"%>
+    <%= textilizable "No status available."%>
   <%end%>  
 </div>
 
@@ -97,11 +99,12 @@ var newselecteddate = getNewCalandarDate(todaysdate,days_ago);
     $( "#datepicker" ).datepicker({ maxDate: "0" , onSelect: function(dateText, inst) { 
           var dateAsString = dateText; //the first parameter of this function
           var selecteddate = $(this).datepicker( 'getDate' ); //the getDate method
-          location.href = "/projects/<%=@project.identifier%>/daily_status?days_ago="+dateDiff(selecteddate , todaysdate)
+          location.href = "/projects/<%=@project.identifier%>/daily_status?days_ago="+dateDiff(selecteddate , todaysdate);
        }
      });
   
   $('#datepicker').datepicker('setDate', newselecteddate);
   setTimeout(function(){ add_Class_To_Selected_Date(); },1000);
+  $('#daily_status_content').height('400px');
 });
 </script>

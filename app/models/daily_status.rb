@@ -20,7 +20,8 @@ class DailyStatus < ActiveRecord::Base
   end
 
   def self.ago number_of, project_id
-    on Time.now-number_of.days, project_id
+    #on Time.now-number_of.days, project_id
+    on Date.today-number_of.days, project_id
   end
 
   def getTodaysStatus project_id

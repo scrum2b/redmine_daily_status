@@ -2,15 +2,16 @@ class DailyStatusesController < ApplicationController
   unloadable
   
   before_filter :find_project, :authorize
+  before_filter :set_time_zone, :authorize
 
   def index
     @daily_statuses = @project.daily_statuses.select('id, created_at')
-    unless params[:days_ago].blank?
+    if !params[:days_ago].blank?
       days = params[:days_ago].to_s.to_i
       if days > 0
         @daily_status = DailyStatus.ago days, @project.id
-        unless @daily_status
-          flash[:notice] = "#{days} days ago status not available."
+        if !@daily_status
+          flash.now[:notice] = "#{days} days ago status not available."
         end
       end
     end
@@ -37,7 +38,7 @@ class DailyStatusesController < ApplicationController
       flash[:notice] = 'Status Saved'
       if !params[:daily_status]['is_email_sent'].nil?
         if @daily_status.email_all
-          flash[:notice] << ', and mail has been sent to all members.' 
+          flash.now[:notice] << ', and mail has been sent to all members.' 
         end  
       end
     else
@@ -55,4 +56,10 @@ class DailyStatusesController < ApplicationController
     return @project = Project.where(:id => params[:project_id]).first if id > 0
     @project = Project.where(:identifier => params[:project_id]).first
   end
+
+  def set_time_zone
+    Time.zone = 'Mumbai'
+  end
+
+
 end
