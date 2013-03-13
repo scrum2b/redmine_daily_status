@@ -1,5 +1,5 @@
 class DailyStatusMailer < ActionMailer::Base
-
+  include Redmine::I18n	
   default :sender => 'admin@redmine.com'
   default :content_type => "text/html"
 
@@ -8,6 +8,6 @@ class DailyStatusMailer < ActionMailer::Base
     @project_name = daily_status.project.name
     @daily_status_content = daily_status.content
     @login_user_name = User.current.name;
-    mail(:to => @recipients, :subject => "Daily Status: "+daily_status.project.name)
+    mail(:to => @recipients, :subject => l(:label_email_subject).to_s+daily_status.project.name)
   end
 end

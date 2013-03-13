@@ -10,3 +10,5 @@ en:
   label_sent_email: "Email already sent for today's this update."
   label_update: "Update"
   label_cancel: "Cancel"
+  label_email_subject: "Daily Status: "
+  label_thanks: "Thanks,"

@@ -9,12 +9,6 @@ class DailyStatus < ActiveRecord::Base
     DailyStatusMailer.send_daily_status(self).deliver
   end
 
-  def title
-    #return "Today's Status" if created_at.today?
-    #return "Yesterday's Status" if created_at.yesterday?
-    #{}"Status on #{created_at.strftime('%b %-d')}"
-  end
-
   def self.on time, project_id
     where(:project_id => project_id).where("DATE(created_at) = DATE(?)", time).first
   end
