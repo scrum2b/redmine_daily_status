@@ -8,6 +8,6 @@ class DailyStatusMailer < ActionMailer::Base
     @project_name = daily_status.project.name
     @daily_status_content = daily_status.content
     @login_user_name = User.current.name;
-    mail(:to => @recipients, :subject => "Daily Status : "+daily_status.project.name)
+    mail(:to => @recipients, :subject => "Daily Status: "+daily_status.project.name)
   end
 end

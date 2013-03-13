@@ -1,3 +1,12 @@
 # English strings go here for Rails i18n
 en:
   daily_status: "Daily Status"
+  label_last_status_not_available: "%{days} days ago status not available."
+  label_status_saved: "Status Saved"
+  label_email_sent_to_all_members: " , and mail has been sent to all members."
+  label_today_no_status: "No status available for today"
+  label_no_status: "No status available."
+  label_send_email: "Send Email to Members"
+  label_sent_email: "Email already sent for today's this update."
+  label_update: "Update"
+  label_cancel: "Cancel"

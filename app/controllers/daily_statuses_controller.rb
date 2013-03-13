@@ -11,7 +11,7 @@ class DailyStatusesController < ApplicationController
       if days > 0
         @daily_status = DailyStatus.ago days, @project.id
         if !@daily_status
-          flash.now[:notice] = "#{days} days ago status not available."
+          flash.now[:notice] = l(:label_last_status_not_available, :days => days)
         end
       end
     end
@@ -34,10 +34,10 @@ class DailyStatusesController < ApplicationController
         @daily_status.is_email_sent = 0
       end  
     if @daily_status.save
-      flash[:notice] = 'Status Saved'
+      flash[:notice] = l(:label_status_saved)
       if !params[:daily_status]['is_email_sent'].nil?
         if @daily_status.email_all
-          flash.now[:notice] << ', and mail has been sent to all members.' 
+          flash[:notice] << l(:label_email_sent_to_all_members)
         end  
       end
     else

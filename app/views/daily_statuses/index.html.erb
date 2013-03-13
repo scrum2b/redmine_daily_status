@@ -1,7 +1,7 @@
 <br/>
 <div>
   <% if params[:days_ago].to_s.to_i == 0 && @todays_status.nil? %>
-      <h4><%= textilizable "No status available for today."%></h4>
+      <h4><%= textilizable l(:label_today_no_status) %></h4>
   <%end%> 
   <div style="float:left" id="daily_status_project_name_header">
     <% if !@daily_status.nil? %>
@@ -26,10 +26,10 @@
       <% if !@daily_status.content.nil? %>
           <%= textilizable @daily_status.content %>  
        <%else%>
-        <%= textilizable "No status available."%>
+        <%= textilizable l(:label_no_status) %>
        <%end%>
   <%else%>
-    <%= textilizable "No status available."%>
+    <%= textilizable l(:label_no_status) %>
   <%end%>  
 </div>
 
@@ -46,14 +46,14 @@
         </span>
       </p>
       <%= wikitoolbar_for 'daily_status_content' %>
-      <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /> Send Email to Members</div>
+      <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email) %></div>
       <% if !@todays_status.nil? %>
             <% if @todays_status.is_email_sent %>
-              <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div>Email already sent for today's this update.</div>
+              <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div><%= l(:label_sent_email) %></div>
             <%end%>
       <%end%>           
-      <input name="update" type="submit" value="Update"/>
-      <input type="button" value="Cancel" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();$('#daily_status_project_name_header').show();"/>
+      <input name="update" type="submit" value="<%= l(:label_update) %>"/>
+      <input type="button" value="<%= l(:label_cancel) %>" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();$('#daily_status_project_name_header').show();"/>
     <% end %>
 </div>
 <%end%>
