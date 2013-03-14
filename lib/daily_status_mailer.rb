@@ -5,7 +5,8 @@ class DailyStatusMailer < Mailer
   unloadable
   ActionMailer::Base.prepend_view_path(File.join(File.dirname(__FILE__), '../app/views'))
 
-  include Redmine::I18n	
+  include Redmine::I18n
+  default :content_type => "text/html"
 
   def send_daily_status(daily_status)
     @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
