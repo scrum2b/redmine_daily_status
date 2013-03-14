@@ -1,7 +1,9 @@
 redmine_daily_status
 ====================
 
-## About: This plugin is used for tracking the daily status update of the project.
+## About: 
+
+This plugin is used for tracking the daily status update of the project.
 
 ## Features
 
