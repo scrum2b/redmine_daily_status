@@ -47,10 +47,13 @@ module MailerPatch
     end
 end
 
-
 module RedmineDailyStatusMailer
   def self.included(base)
     base.class_eval do
+      unloadable
+
+      self.instance_variable_get("@inheritable_attributes")[:view_paths] << RAILS_ROOT + "/plugins/redmine_daily_status/app/views"
+
       def send_daily_status(daily_status)
         @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
         @project_name = daily_status.project.name
