@@ -36,7 +36,7 @@ class DailyStatusesController < ApplicationController
     if @daily_status.save
       flash[:notice] = l(:label_status_saved)
       if !params[:daily_status]['is_email_sent'].nil?
-        if DailyStatusMailer.send_daily_status(@daily_status).deliver
+        if @daily_status.email_all
           flash[:notice] << l(:label_email_sent_to_all_members)
         end  
       end
