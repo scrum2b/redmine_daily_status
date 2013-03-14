@@ -3,7 +3,7 @@ require "mailer"
 
 class DailyStatusMailer < Mailer
   unloadable
-  ActionMailer::Base.prepend_view_path(File.join(File.dirname(__FILE__), '../app/views/daily_status_mailer/'))
+  ActionMailer::Base.prepend_view_path(File.join(File.dirname(__FILE__), '../app/views'))
 
   include Redmine::I18n	
   default :content_type => "text/html"
