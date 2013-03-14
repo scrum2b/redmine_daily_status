@@ -23,33 +23,43 @@ end
 require_dependency 'daily_status_project_patch'
 require 'daily_status_mailer'
 
-require 'dispatcher'   
-module RedmineDailyStatus
-  module Patches    
-    module MailerPatch
-      module InstanceMethods
-        def send_daily_status(daily_status)
-          @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
-          @project_name = daily_status.project.name
-          @daily_status_content = daily_status.content
-          @login_user_name = User.current.name;
-          mail(:to => @recipients, :subject => l(:label_email_subject).to_s+daily_status.project.name)
-        end
-      end  
 
-      def self.included(receiver)
-        receiver.send :include, InstanceMethods
-        receiver.class_eval do 
-          unloadable   
-          self.instance_variable_get("@inheritable_attributes")[:view_paths] << RAILS_ROOT + "/vendor/plugins/redmine_daily_status/app/views"
-        end  
+require_dependency 'mail_handler'
+
+module MailerPatch
+    def self.included(base) # :nodoc:
+        base.send(:include, InstanceMethods)
+        base.class_eval do
+            alias_method_chain :issue_add, :project_emission_email
+            # ... override the rest of the methods as well
+        end
+    end
+    module InstanceMethods
+      def issue_add_with_project_emission_email(issue)
+        from_project issue
+        issue_add_without_project_emission_email issue
+      end
+      def from_project(container)
+        unless container.nil? || container.project.nil? || container.project.mail_from.nil? || container.project.mail_from.empty?
+          from container.project.mail_from
+        end
       end
     end
+end
+
+
+module RedmineDailyStatusMailer
+  def self.included(base)
+    base.class_eval do
+      def send_daily_status(daily_status)
+        @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
+        @project_name = daily_status.project.name
+        @daily_status_content = daily_status.content
+        @login_user_name = User.current.name;
+        mail(:to => @recipients, :subject => l(:label_email_subject).to_s+daily_status.project.name)
+      end
+    end  
   end
 end
 
-Dispatcher.to_prepare do  
-  unless Mailer.included_modules.include?(RedmineDailyStatus::Patches::MailerPatch)
-    Mailer.send(:include, RedmineDailyStatus::Patches::MailerPatch)
-  end   
-end
+Mailer.send(:include, RedmineDailyStatusMailer)
