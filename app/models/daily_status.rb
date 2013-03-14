@@ -6,7 +6,7 @@ class DailyStatus < ActiveRecord::Base
   validates_presence_of :content
 
   def email_all
-    DailyStatusMailer.send_daily_status(self).deliver
+    Mailer.send_daily_status(self).deliver
   end
 
   def self.on time, project_id
