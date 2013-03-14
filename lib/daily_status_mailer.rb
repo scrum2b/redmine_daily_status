@@ -1,7 +1,11 @@
-class DailyStatusMailer < ActionMailer::Base
-  include Redmine::I18n	
-  default :sender => 'admin@redmine.com'
-  default :content_type => "text/html"
+gem "actionmailer"
+require "mailer"
+
+class DailyStatusMailer < Mailer
+  unloadable
+  ActionMailer::Base.prepend_view_path(File.join(File.dirname(__FILE__), './', 'app/views/daily_status_mailer'))
+
+  #include Redmine::I18n	
 
   def send_daily_status(daily_status)
     @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
