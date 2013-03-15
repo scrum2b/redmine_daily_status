@@ -12,3 +12,5 @@ en:
   label_cancel: "Cancel"
   label_email_subject: "Daily Status: "
   label_thanks: "Thanks,"
+  label_add_update_today_status: "Add/Update Today's Status"
+  label_edit_today_status: "Edit Today's Status"

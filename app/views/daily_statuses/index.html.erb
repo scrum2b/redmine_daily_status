@@ -16,7 +16,7 @@
   </div>
    <div style="float:right">
     <% if User.current.allowed_to?(:manage_daily_status, @project) %>
-      <a href="#" accesskey="e" class="icon icon-add" onClick="$('#daily_status_content_form').show();$('#daily_status_content_show').hide();$('#daily_status_project_name_header').hide();">Add/Update Today's Status</a>
+      <a href="#" accesskey="e" class="icon icon-add" onClick="$('#daily_status_content_form').show();$('#daily_status_content_show').hide();$('#daily_status_project_name_header').hide();"><%= l(:label_add_update_today_status) %></a>
     <%end%>
   </div>
 </div>
@@ -35,6 +35,7 @@
 
 <% if User.current.allowed_to?(:manage_daily_status, @project) %>
   <div id="daily_status_content_form" class="box" style='display:none;'>
+    <h3><%= l(:label_edit_today_status) %></h3>
     <%= form_for(@daily_status, :url => "/projects/#{@project.identifier}/daily_status", :html => { :method => :post}) do |f| %>
       <p>
         <span id="daily_status_content_and_toolbar">
