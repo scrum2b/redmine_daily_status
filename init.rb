@@ -19,6 +19,8 @@ Redmine::Plugin.register :redmine_daily_status do
     :after => :activity,
     :param => :project_id
 end
-
+Redmine::Activity.map do |activity|
+  activity.register :daily_statuses,{:class_name => 'DailyStatus'}
+end
 require_dependency 'daily_status_project_patch'
 require 'daily_status_mailer'

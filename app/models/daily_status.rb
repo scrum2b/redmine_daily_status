@@ -5,6 +5,16 @@ class DailyStatus < ActiveRecord::Base
   belongs_to :project
   validates_presence_of :content
 
+  acts_as_event :author => nil,
+                :datetime => :created_at,
+                :description => :content,
+                :title => :content
+
+  acts_as_activity_provider :timestamp => "#{table_name}.created_at",
+                            :find_options => {:include => :project,
+                                            :select => "#{table_name}.*"},
+                            :permission => :view_daily_status
+
   def email_all
     DailyStatusMailer.send_daily_status(self).deliver
   end
@@ -20,5 +30,5 @@ class DailyStatus < ActiveRecord::Base
 
   def self.todays_status_for project
     where(:project_id => project.id).where("created_at >= ? and created_at <= ?", Date.today.beginning_of_day, Date.today.end_of_day).first
-  end
+  end  
 end
