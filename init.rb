@@ -20,14 +20,5 @@ Redmine::Plugin.register :redmine_daily_status do
     :param => :project_id
 end
 
-module DailyStatusProjectPatch
-  def self.included(base)
-    base.class_eval do
-      unloadable
-      has_many :daily_statuses
-    end
-  end
-end
-
-Project.send(:include, DailyStatusProjectPatch)
+require_dependency 'daily_status_project_patch'
 require 'daily_status_mailer'

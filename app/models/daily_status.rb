@@ -24,8 +24,7 @@ class DailyStatus < ActiveRecord::Base
     on Date.today-number_of.days, project_id
   end
 
-  def getTodaysStatus project_id
-    DailyStatus.where(:project_id => project_id).where("created_at >= ? and created_at <= ?", Date.today.beginning_of_day, Date.today.end_of_day).first
-    #where(:project_id => project_id).where(:created_at => ((time.to_date)+' 00:00:00')..((time.to_date)+' 23:59:59'))
+  def self.todays_status_for project
+    where(:project_id => project.id).where("created_at >= ? and created_at <= ?", Date.today.beginning_of_day, Date.today.end_of_day).first
   end
 end

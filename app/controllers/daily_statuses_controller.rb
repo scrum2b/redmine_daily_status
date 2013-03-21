@@ -16,8 +16,7 @@ class DailyStatusesController < ApplicationController
       end
     end
 
-    daily_status_model_obj =  DailyStatus.new
-    @todays_status  = daily_status_model_obj.getTodaysStatus @project.id
+    @todays_status  = @project.todays_status
     @daily_status ||= @project.daily_statuses.first
     @daily_status ||= @project.daily_statuses.build
   end
