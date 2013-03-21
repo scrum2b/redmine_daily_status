@@ -8,12 +8,25 @@ class DailyStatus < ActiveRecord::Base
   acts_as_event :author => nil,
                 :datetime => :created_at,
                 :description => :content,
-                :title => :content
+                :title => :content,
+                :url =>Proc.new { 
+                                  |o|  
+                                  {
+                                      :controller => 'daily_statuses', 
+                                      :action => 'index', 
+                                      :project_id => o.project , 
+                                      :day =>   (o.created_at.to_date).to_s
+                                  } 
+                                }
 
   acts_as_activity_provider :timestamp => "#{table_name}.created_at",
-                            :find_options => {:include => :project,
-                                            :select => "#{table_name}.*"},
+                            :find_options => {
+                                                :include => :project,
+                                                :select => "#{table_name}.*",
+                                                :conditions => "#{table_name}.is_email_sent=1"
+                                              },
                             :permission => :view_daily_status
+                            
 
   def email_all
     DailyStatusMailer.send_daily_status(self).deliver
@@ -30,5 +43,6 @@ class DailyStatus < ActiveRecord::Base
 
   def self.todays_status_for project
     where(:project_id => project.id).where("created_at >= ? and created_at <= ?", Date.today.beginning_of_day, Date.today.end_of_day).first
-  end  
+  end 
+
 end

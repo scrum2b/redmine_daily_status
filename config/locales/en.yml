@@ -14,3 +14,4 @@ en:
   label_thanks: "Thanks,"
   label_add_update_today_status: "Add/Update Today's Status"
   label_edit_today_status: "Edit Today's Status"
+  label_invalid_date_format: "Invalid date format.It should be in YYYY-mm-dd"

@@ -2,46 +2,48 @@ class DailyStatusesController < ApplicationController
   unloadable
   
   before_filter :find_project, :authorize
-  before_filter :set_time_zone, :authorize
 
   def index
-    @daily_statuses = @project.daily_statuses.select('id, created_at')
-    if !params[:days_ago].blank?
-      days = params[:days_ago].to_s.to_i
-      if days > 0
-        @daily_status = DailyStatus.ago days, @project.id
-        if !@daily_status
-          flash.now[:notice] = l(:label_last_status_not_available, :days => days)
+    @todays_status  = @project.todays_status
+
+    days_ago = params[:days_ago].nil? ? nil : params[:days_ago].to_s.to_i
+
+      if !params[:day].blank?
+        begin
+          Date.parse(params[:day])
+        rescue
+         #flash.now[:notice] = l(:label_invalid_date_format) 
+         days_ago = 0
         end
+      end  
+    days_ago ||= ((Time.now - params[:day].to_s.to_datetime)/1.day).to_i unless params[:day].blank?
+
+      if days_ago.nil?
+        days_ago = 0
       end
+        
+    if days_ago > 0
+      @daily_status = DailyStatus.ago days_ago, @project.id
+      flash.now[:notice] = l(:label_last_status_not_available, :days => days_ago) unless @daily_status
     end
 
-    @todays_status  = @project.todays_status
-    @daily_status ||= @project.daily_statuses.first
+    @daily_status ||= @todays_status
     @daily_status ||= @project.daily_statuses.build
   end
 
   def save
+    @todays_status  = @project.todays_status || @project.daily_statuses.build
 
-    @daily_statuses = @project.daily_statuses.select('id, created_at')
-    @daily_status   = DailyStatus.where(:id => params[:id]).first
-    @daily_status ||= @project.daily_statuses.build
-
-    @daily_status.content = params[:daily_status][:content]
-      if !params[:daily_status][:is_email_sent].nil?
-        @daily_status.is_email_sent = params[:daily_status][:is_email_sent]
-      else
-        @daily_status.is_email_sent = 0
-      end  
-    if @daily_status.save
+    if @todays_status.update_attributes params[:daily_status]
       flash[:notice] = l(:label_status_saved)
-      if !params[:daily_status]['is_email_sent'].nil?
-        if @daily_status.email_all
-          flash[:notice] << l(:label_email_sent_to_all_members)
-        end  
-      end
+
+      if !params[:daily_status][:is_email_sent].nil? and @todays_status.email_all
+        flash[:notice] << l(:label_email_sent_to_all_members)
+      end  
+
     else
-      flash[:notice] = @daily_status.errors.full_messages[0]
+      flash[:notice] = @todays_status.errors.full_messages.first
+
     end
     
     #render :index
@@ -55,10 +57,4 @@ class DailyStatusesController < ApplicationController
     return @project = Project.where(:id => params[:project_id]).first if id > 0
     @project = Project.where(:identifier => params[:project_id]).first
   end
-
-  def set_time_zone
-    Time.zone = 'Mumbai'
-  end
-
-
 end
