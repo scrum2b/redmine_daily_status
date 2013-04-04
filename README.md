@@ -1,9 +1,17 @@
 redmine_daily_status
 ====================
 
-## About: 
+## Usage: 
 
-This plugin is used for tracking the daily status update of the project.
+* a small project team of size 2-5 or may be more, where team lead does send daily status email to product manager or other seniors
+* and then it requires to maintain those emails archived in inbox
+* this daily status can be useful to compile monthly reports or similar use case
+* each one receiving this daily status email needs to save those emails if found important to him or her
+* team using redmine needs a solution here not to consume inbox of everyone involved
+* all material w.r.t. project tracking should be maintained by one tool
+* hence we decided to develop this simple plugin for us
+* one might find this specific to a particular use case, and it is
+* but yes one may find it ready to use and/or fork it to address her additional needs
 
 ## Features
 
