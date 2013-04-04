@@ -9,14 +9,14 @@ class DailyStatus < ActiveRecord::Base
                 :datetime => :created_at,
                 :description => :content,
                 :title => :content,
-                :url =>Proc.new { 
-                                  |o|  
+                :url =>Proc.new {
+                                  |o|
                                   {
-                                      :controller => 'daily_statuses', 
-                                      :action => 'index', 
-                                      :project_id => o.project , 
-                                      :day =>   (o.created_at.to_date).to_s
-                                  } 
+                                      :controller => 'daily_statuses',
+                                      :action => 'index',
+                                      :project_id => o.project ,
+                                      :day => (o.created_at.to_date).to_s
+                                  }
                                 }
 
   acts_as_activity_provider :timestamp => "#{table_name}.created_at",
@@ -43,6 +43,6 @@ class DailyStatus < ActiveRecord::Base
 
   def self.todays_status_for project
     where(:project_id => project.id).where("created_at >= ? and created_at <= ?", Date.today.beginning_of_day, Date.today.end_of_day).first
-  end 
+  end
 
 end

@@ -2,7 +2,7 @@
 <div>
   <% if params[:days_ago].to_s.to_i == 0 && @todays_status.nil? %>
       <h4><%= textilizable l(:label_today_no_status) %></h4>
-  <%end%> 
+  <%end%>
   <div style="float:left" id="daily_status_project_name_header">
     <% if !@daily_status.nil? %>
         <% if !@daily_status.created_at.nil? %>
@@ -24,13 +24,13 @@
 <div id="daily_status_content_show" class="wiki wiki-page">
   <% if !@daily_status.nil? %>
       <% if !@daily_status.content.nil? %>
-          <%= textilizable @daily_status.content %>  
+          <%= textilizable @daily_status.content %>
        <%else%>
         <%= textilizable l(:label_no_status) %>
        <%end%>
   <%else%>
     <%= textilizable l(:label_no_status) %>
-  <%end%>  
+  <%end%>
 </div>
 
 <% if User.current.allowed_to?(:manage_daily_status, @project) %>
@@ -39,7 +39,7 @@
     <%= form_for(@daily_status, :url => "/projects/#{@project.identifier}/daily_status", :html => { :method => :post}) do |f| %>
       <p>
         <span id="daily_status_content_and_toolbar">
-          <% if !@todays_status.nil? %>                 
+          <% if !@todays_status.nil? %>
               <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"><%= @todays_status.content %></textarea>
           <%else%>
               <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"></textarea>
@@ -52,7 +52,7 @@
             <% if @todays_status.is_email_sent %>
               <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div><%= l(:label_sent_email) %></div>
             <%end%>
-      <%end%>           
+      <%end%>
       <input name="update" type="submit" value="<%= l(:label_update) %>"/>
       <input type="button" value="<%= l(:label_cancel) %>" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();$('#daily_status_project_name_header').show();"/>
     <% end %>
@@ -66,13 +66,13 @@
       week_beginning_date = today_date.at_beginning_of_week
       liblock = ""
       todayliblock = ""
-      while (today_date - week_beginning_date).to_i  >= 0 do 
-          days_ago = (today_date - week_beginning_date).to_i 
+      while (today_date - week_beginning_date).to_i >= 0 do
+          days_ago = (today_date - week_beginning_date).to_i
           liblock += '<li><a href="/projects/'+@project.identifier+'/daily_status?days_ago='+days_ago.to_s+'">'+week_beginning_date.strftime("%a")+'</a>&nbsp;|&nbsp;</li>'
-          week_beginning_date = week_beginning_date+1 
+          week_beginning_date = week_beginning_date+1
       end
       *a, b = liblock.split('|&nbsp;', -1)
-      %> 
+      %>
           <%= (a.join('|&nbsp;')+'&nbsp;'+b).html_safe %>
     
 </ul>
@@ -98,7 +98,7 @@ var qs = getQueryStrings();
 
 var SelectedDates = {};
 var newselecteddate = getNewCalandarDate(todaysdate,days_ago);
-    $( "#datepicker" ).datepicker({ maxDate: "0" , onSelect: function(dateText, inst) { 
+    $( "#datepicker" ).datepicker({ maxDate: "0" , onSelect: function(dateText, inst) {
           var dateAsString = dateText; //the first parameter of this function
           var selecteddate = $(this).datepicker( 'getDate' ); //the getDate method
           location.href = "/projects/<%=@project.identifier%>/daily_status?days_ago="+dateDiff(selecteddate , todaysdate);
