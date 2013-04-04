@@ -35,5 +35,5 @@ the current day status.
 
 ## How to UnInstall:
 
-rake redmine:plugins:migrate NAME=redmine_daily_status VERSION=0
-Remove the redmine_daily_status directory from the plugin directory and then restart redmine.
+* rake redmine:plugins:migrate NAME=redmine_daily_status VERSION=0
+* Remove the redmine_daily_status directory from the plugin directory and then restart redmine.
