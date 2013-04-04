@@ -1,7 +1,7 @@
 redmine_daily_status
 ====================
 
-## Usage: 
+## About: 
 
 * a small project team of size 2-5 or may be more, where team lead does send daily status email to product manager or other seniors
 * and then it requires to maintain those emails archived in inbox
