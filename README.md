@@ -28,7 +28,7 @@ need to restart redmine for the plugin to be available.
 
 * Assigning permission to users for viewing and updating the status.
 
-* User can only add/update the current date's status.He can only view the past dates project status.
+* User can only add/update the current date's status. He can only view the past dates project status.
 
 * If user click the "send email to members" check box and then update the status. Email will be send to all the project members with 
 the current day status.
