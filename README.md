@@ -20,7 +20,7 @@ To install the Daily Status, execute the following commands from the plugin dire
     rake redmine:plugins:migrate NAME=redmine_daily_status
 
 After the plugin is installed and the db migration completed, you will
-need to restart Redmine for the plugin to be available.
+need to restart redmine for the plugin to be available.
 
 ## How to Use:
 
@@ -30,7 +30,7 @@ need to restart Redmine for the plugin to be available.
 
 * User can only add/update the current date's status.He can only view the past dates project status.
 
-* If user click the "send email to members" check box and then update the status.Email will be send to all the project members with 
+* If user click the "send email to members" check box and then update the status. Email will be send to all the project members with 
 the current day status.
 
 ## How to UnInstall:
