@@ -7,7 +7,7 @@ A small project of team  size 2-5 or may be more, where team lead does send dail
 
 ## Features
 
-* Update Today's Status
+* Update today's status
 * View past days status
 * Email send to all project members
 
