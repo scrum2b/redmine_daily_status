@@ -7,8 +7,13 @@ class DailyStatusMailer < Mailer
 
   include Redmine::I18n
 
-  def send_daily_status(daily_status)
-    @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
+  def send_daily_status(daily_status,project_daily_status)
+    @recipients = project_daily_status.watcher_recipients
+    
+      if !@recipients.nil?
+      @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
+      end
+      
     @project_name = daily_status.project.name
     @daily_status_content = daily_status.content
     @login_user_name = User.current.name;

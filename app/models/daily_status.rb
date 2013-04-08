@@ -28,8 +28,8 @@ class DailyStatus < ActiveRecord::Base
                             :permission => :view_daily_status
                             
 
-  def email_all
-    DailyStatusMailer.send_daily_status(self).deliver
+  def email_all project_daily_status
+    DailyStatusMailer.send_daily_status(self,project_daily_status).deliver
   end
 
   def self.on time, project_id

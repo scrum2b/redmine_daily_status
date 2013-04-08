@@ -79,7 +79,12 @@
     <br/>
     <h4>History</h4>
  <div id="datepicker"></div>
- <div id="watchers"></div>
+   <% if User.current.allowed_to?(:manage_daily_status, @project) ||
+    (@project_daily_status_setting.watchers.present? && User.current.allowed_to?(:manage_daily_status, @project)) %>
+    <div id="watchers">
+      <%= render :partial => 'watchers/watchers', :locals => {:watched => @project_daily_status_setting} %>
+    </div>
+  <% end %>
 <% end %>
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag 'daily_status', :plugin => 'redmine_daily_status' %>

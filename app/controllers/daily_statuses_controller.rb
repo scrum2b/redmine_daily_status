@@ -2,6 +2,8 @@ class DailyStatusesController < ApplicationController
   unloadable
   
   before_filter :find_project, :authorize
+  helper :watchers
+  include WatchersHelper
 
   def index
     @todays_status = @project.todays_status
@@ -29,15 +31,17 @@ class DailyStatusesController < ApplicationController
 
     @daily_status ||= @todays_status
     @daily_status ||= @project.daily_statuses.build
+    @project_daily_status_setting = @project.dummy	
   end
 
   def save
     @todays_status = @project.todays_status || @project.daily_statuses.build
+    @project_daily_status = @project.dummy2 #get watchable object
 
     if @todays_status.update_attributes params[:daily_status]
       flash[:notice] = l(:label_status_saved)
 
-      if !params[:daily_status][:is_email_sent].nil? and @todays_status.email_all
+      if !params[:daily_status][:is_email_sent].nil?  and @todays_status.email_all @project_daily_status
         flash[:notice] << l(:label_email_sent_to_all_members)
       end
 
