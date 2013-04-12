@@ -79,8 +79,8 @@
     <br/>
     <h4>History</h4>
  <div id="datepicker"></div>
-   <% if User.current.allowed_to?(:manage_daily_status, @project) ||
-    (@project_daily_status_watchers.watchers.present? && User.current.allowed_to?(:manage_daily_status, @project)) %>
+   <% if User.current.allowed_to?(:add_pd_setting_watchers, @project) || 
+    (@project_daily_status_watchers.watchers.present? && User.current.allowed_to?(:add_pd_setting_watchers, @project)) %>
     <div id="watchers">
       <%= render :partial => 'watchers/watchers', :locals => {:watched => @project_daily_status_watchers} %>
     </div>

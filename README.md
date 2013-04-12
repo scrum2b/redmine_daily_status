@@ -7,9 +7,11 @@ A small project of team  size 2-5 or may be more, where team lead does send dail
 
 ## Features
 
-* Update today's status
-* View past days status
-* Email send to all project members
+* Update today's status.
+* View past days status.
+* Daily status activity will be logged after daily status email sent.This activity will occured once.
+* Watchers support is added.
+* Email will send to all watchers or all project members in case of no watchers available to project daily status.
 
 
 ## How to Install:
@@ -26,12 +28,12 @@ need to restart redmine for the plugin to be available.
 
 * Enable the plugin from the settings of the project.
 
-* Assigning permission to users for viewing and updating the status.
+* Assigning permission to users for viewing and updating the status and also for adding and deleting watchers.
 
 * User can only add/update the current date's status. He can only view the past dates project status.
 
-* If user click the "send email to members" check box and then update the status. Email will be send to all the project members with 
-the current day status.
+* If user click the "send email to members" check box and then update the status. Email will be send to all project daily status watchers.If
+no watchers available then email will send to all project members.
 
 ## How to UnInstall:
 
