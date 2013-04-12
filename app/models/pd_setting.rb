@@ -3,13 +3,13 @@ class PdSetting < ActiveRecord::Base
   belongs_to :project
   acts_as_watchable PdSetting     
 
-  def self.dummy project
+  def self.projectwatchers project
     sql = "INSERT INTO pd_settings (project_id) VALUES (#{project.id});"
     conn =  ActiveRecord::Base.connection
     conn.execute sql
     where(:project_id => project.id).first
   end
-  def self.dummy2 project
+  def self.daily_status_watchers project
     where(:project_id => project.id).first
   end             
 end

@@ -9,11 +9,11 @@ module DailyStatusProjectPatch
       def todays_status
         DailyStatus.todays_status_for self
       end
-      def dummy
-        PdSetting.dummy self
+      def projectwatchers
+        PdSetting.projectwatchers self
       end
-      def dummy2
-        PdSetting.dummy2 self
+      def daily_status_watchers
+        PdSetting.daily_status_watchers self
       end
     end
   end

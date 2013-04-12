@@ -80,9 +80,9 @@
     <h4>History</h4>
  <div id="datepicker"></div>
    <% if User.current.allowed_to?(:manage_daily_status, @project) ||
-    (@project_daily_status_setting.watchers.present? && User.current.allowed_to?(:manage_daily_status, @project)) %>
+    (@project_daily_status_watchers.watchers.present? && User.current.allowed_to?(:manage_daily_status, @project)) %>
     <div id="watchers">
-      <%= render :partial => 'watchers/watchers', :locals => {:watched => @project_daily_status_setting} %>
+      <%= render :partial => 'watchers/watchers', :locals => {:watched => @project_daily_status_watchers} %>
     </div>
   <% end %>
 <% end %>
