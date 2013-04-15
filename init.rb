@@ -11,8 +11,8 @@ Redmine::Plugin.register :redmine_daily_status do
   project_module :daily_status do
     permission :view_daily_status,   :daily_statuses => :index
     permission :manage_daily_status, :daily_statuses => :save
-    permission :add_pd_setting_watchers, :watchers => :new
-    permission :delete_pd_setting_watchers, :watchers => :destroy
+    permission :add_daily_status_setting_watchers, :watchers => :new
+    permission :delete_daily_status_setting_watchers, :watchers => :destroy
   end
  
   menu :project_menu, :daily_statuses,

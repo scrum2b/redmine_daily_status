@@ -10,20 +10,19 @@ class DailyStatusesController < ApplicationController
 
     days_ago = params[:days_ago].nil? ? nil : params[:days_ago].to_s.to_i
 
-      if !params[:day].blank?
-        begin
-          Date.parse(params[:day])
-        rescue
-         #flash.now[:notice] = l(:label_invalid_date_format)
-         days_ago = 0
-        end
+    if !params[:day].blank?
+      begin
+        Date.parse(params[:day])
+      rescue
+       #flash.now[:notice] = l(:label_invalid_date_format)
+       days_ago = 0
       end
+    end
+
     days_ago ||= ((Time.now - params[:day].to_s.to_datetime)/1.day).to_i unless params[:day].blank?
 
-      if days_ago.nil?
-        days_ago = 0
-      end
-        
+    days_ago ||= 0
+
     if days_ago > 0
       @daily_status = DailyStatus.ago days_ago, @project.id
       flash.now[:notice] = l(:label_last_status_not_available, :days => days_ago) unless @daily_status
@@ -31,7 +30,8 @@ class DailyStatusesController < ApplicationController
 
     @daily_status ||= @todays_status
     @daily_status ||= @project.daily_statuses.build
-    @project_daily_status_watchers = @project.projectwatchers	
+
+    daily_status_setting   = @daily_status.setting
   end
 
   def save

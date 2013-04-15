@@ -4,12 +4,8 @@
       <h4><%= textilizable l(:label_today_no_status) %></h4>
   <%end%>
   <div style="float:left" id="daily_status_project_name_header">
-    <% if !@daily_status.nil? %>
-        <% if !@daily_status.created_at.nil? %>
-            <h3>Project Status on <%=(@daily_status.created_at).strftime('%b %-d')%></h3>
-        <%else%>
-            <h3>Project Status on <%=(Date.today).strftime('%b %-d')%></h3>
-        <%end%>
+    <% if @daily_status.created_at %>
+      <h3>Project Status on <%=(@daily_status.created_at).strftime('%b %-d')%></h3>
     <%else%>
       <h3>Project Status on <%=(Date.today).strftime('%b %-d')%></h3>
     <%end%>
@@ -22,12 +18,8 @@
 </div>
 <br/><br/>
 <div id="daily_status_content_show" class="wiki wiki-page">
-  <% if !@daily_status.nil? %>
-      <% if !@daily_status.content.nil? %>
-          <%= textilizable @daily_status.content %>
-       <%else%>
-        <%= textilizable l(:label_no_status) %>
-       <%end%>
+  <% if @daily_status.content %>
+    <%= textilizable @daily_status.content %>
   <%else%>
     <%= textilizable l(:label_no_status) %>
   <%end%>
@@ -39,20 +31,18 @@
     <%= form_for(@daily_status, :url => "/projects/#{@project.identifier}/daily_status", :html => { :method => :post}) do |f| %>
       <p>
         <span id="daily_status_content_and_toolbar">
-          <% if !@todays_status.nil? %>
-              <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"><%= @todays_status.content %></textarea>
-          <%else%>
-              <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"></textarea>
-          <%end%>
+          <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"><%= @todays_status.content %></textarea>
         </span>
       </p>
+
       <%= wikitoolbar_for 'daily_status_content' %>
+
       <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email) %></div>
-      <% if !@todays_status.nil? %>
-            <% if @todays_status.is_email_sent %>
-              <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div><%= l(:label_sent_email) %></div>
-            <%end%>
+
+      <% if @todays_status.is_email_sent %>
+        <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div><%= l(:label_sent_email) %></div>
       <%end%>
+
       <input name="update" type="submit" value="<%= l(:label_update) %>"/>
       <input type="button" value="<%= l(:label_cancel) %>" onclick="$('#daily_status_content_form').hide();$('#daily_status_content_show').show();$('#daily_status_project_name_header').show();"/>
     <% end %>
@@ -79,10 +69,10 @@
     <br/>
     <h4>History</h4>
  <div id="datepicker"></div>
-   <% if User.current.allowed_to?(:add_pd_setting_watchers, @project) || 
-    (@project_daily_status_watchers.watchers.present? && User.current.allowed_to?(:add_pd_setting_watchers, @project)) %>
+   <% if User.current.allowed_to?(:add_daily_status_setting_watchers, @project) || 
+    (@daily_status.setting.watchers.present? && User.current.allowed_to?(:add_daily_status_setting_watchers, @project)) %>
     <div id="watchers">
-      <%= render :partial => 'watchers/watchers', :locals => {:watched => @project_daily_status_watchers} %>
+      <%= render :partial => 'watchers/watchers', :locals => {:watched => @daily_status.setting} %>
     </div>
   <% end %>
 <% end %>

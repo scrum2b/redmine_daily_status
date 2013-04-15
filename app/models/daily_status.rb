@@ -5,6 +5,10 @@ class DailyStatus < ActiveRecord::Base
   belongs_to :project
   validates_presence_of :content
 
+  def setting
+    project.daily_status_setting or project.create_daily_status_setting
+  end
+
   acts_as_event :author => nil,
                 :datetime => :created_at,
                 :description => :content,
