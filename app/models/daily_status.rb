@@ -23,7 +23,7 @@ class DailyStatus < ActiveRecord::Base
                             :find_options => {
                                                 :include => :project,
                                                 :select => "#{table_name}.*",
-                                                :conditions => "#{table_name}.is_email_sent=1"
+                                                :conditions => "#{table_name}.is_email_sent=true"
                                               },
                             :permission => :view_daily_status
                             
