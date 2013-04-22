@@ -31,7 +31,11 @@
     <%= form_for(@daily_status, :url => "/projects/#{@project.identifier}/daily_status", :html => { :method => :post}) do |f| %>
       <p>
         <span id="daily_status_content_and_toolbar">
+          <% if @todays_status %>
           <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"><%= @todays_status.content %></textarea>
+          <% else %>
+          <textarea accesskey="e" class="wiki-edit" cols="60" id="daily_status_content" name="daily_status[content]" rows="10"></textarea>
+          <% end %>
         </span>
       </p>
 
@@ -39,8 +43,10 @@
 
       <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email) %></div>
 
-      <% if @todays_status.is_email_sent %>
+      <% if @todays_status %>
+        <% if @todays_status.is_email_sent %>
         <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div><%= l(:label_sent_email) %></div>
+        <%end%>
       <%end%>
 
       <input name="update" type="submit" value="<%= l(:label_update) %>"/>

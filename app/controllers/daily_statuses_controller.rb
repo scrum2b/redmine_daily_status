@@ -30,18 +30,16 @@ class DailyStatusesController < ApplicationController
 
     @daily_status ||= @todays_status
     @daily_status ||= @project.daily_statuses.build
-
-    daily_status_setting   = @daily_status.setting
   end
 
   def save
     @todays_status = @project.todays_status || @project.daily_statuses.build
-    @project_daily_status_wathcers = @project.daily_status_watchers #get watchable object
+    @daily_status_watchers =  @todays_status.setting #get watchable object
 
     if @todays_status.update_attributes params[:daily_status]
       flash[:notice] = l(:label_status_saved)
 
-      if !params[:daily_status][:is_email_sent].nil?  and @todays_status.email_all @project_daily_status_wathcers
+      if !params[:daily_status][:is_email_sent].nil?  and @todays_status.email_all @daily_status_watchers
         flash[:notice] << l(:label_email_sent_to_all_members)
       end
 

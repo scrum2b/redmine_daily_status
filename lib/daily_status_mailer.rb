@@ -7,8 +7,8 @@ class DailyStatusMailer < Mailer
 
   include Redmine::I18n
 
-  def send_daily_status(daily_status,project_daily_status)
-    @recipients = project_daily_status.watcher_recipients
+  def send_daily_status(daily_status,daily_status_watchers)
+    @recipients = daily_status_watchers.watcher_recipients
     
       if !@recipients.nil?
       @recipients = daily_status.project.members.collect {|m| m.user}.collect {|u| u.mail}
