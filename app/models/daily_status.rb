@@ -3,14 +3,14 @@ class DailyStatus < ActiveRecord::Base
   unloadable
   default_scope order('created_at desc')
   belongs_to :project
+  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
   validates_presence_of :content
 
   def setting
     project.daily_status_setting or project.create_daily_status_setting
   end
 
-  acts_as_event :author => nil,
-                :datetime => :created_at,
+  acts_as_event :datetime => :created_at,
                 :description => :content,
                 :title => :content,
                 :url =>Proc.new {
@@ -25,16 +25,20 @@ class DailyStatus < ActiveRecord::Base
 
   acts_as_activity_provider :timestamp => "#{table_name}.created_at",
                             :find_options => {
-                                                :include => :project,
+                                                :include => [:project, :author],
                                                 :select => "#{table_name}.*",
                                                 :conditions => "#{table_name}.is_email_sent=1"
                                               },
-                            :permission => :view_daily_status
+                            :permission => :view_daily_status,
+                            :author_key => :author_id
                             
 
   def email
-    recipients = setting.watcher_recipients or project.members.collect {|m| m.user}.collect(&:mail)
-
+    if !setting.watcher_recipients.nil?
+      recipients = setting.watcher_recipients
+    else
+      recipients = project.members.collect {|m| m.user}.collect(&:mail)      
+    end  
     DailyStatusMailer.send_daily_status(self, recipients).deliver
   end
 

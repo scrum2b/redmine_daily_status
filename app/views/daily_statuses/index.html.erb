@@ -40,9 +40,13 @@
       </p>
 
       <%= wikitoolbar_for 'daily_status_content' %>
-
-      <div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email) %></div>
-
+      <% if !@daily_status.setting.watchers.present? %>
+        <div id="project_members"><div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email_project_members) %></div></div>
+        <div id="project_watchers" style="display:none;"><div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email_project_watchers) %></div></div>
+        <% else %>
+        <div id="project_watchers"><div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email_project_watchers) %></div></div>
+        <div id="project_members" style="display:none;"><div class="daily_status_email_checkbox"><input type='checkbox' name="daily_status[is_email_sent]" value=1 /><%= l(:label_send_email_project_members) %></div></div>
+      <% end %>
       <% if @todays_status %>
         <% if @todays_status.is_email_sent %>
         <div class="daily_status_email_notification_text"><div class="daily_status_note"><b>Note:&nbsp;</b></div><%= l(:label_sent_email) %></div>
@@ -75,12 +79,17 @@
     <br/>
     <h4>History</h4>
  <div id="datepicker"></div>
-   <% if User.current.allowed_to?(:add_daily_status_setting_watchers, @project) || 
-    (@daily_status.setting.watchers.present? && User.current.allowed_to?(:add_daily_status_setting_watchers, @project)) %>
+   <% if User.current.allowed_to?(:manage_daily_status, @project) ||
+    (@daily_status.setting.watchers.present? && User.current.allowed_to?(:manage_daily_status, @project)) %>
     <div id="watchers">
-      <%= render :partial => 'watchers/watchers', :locals => {:watched => @daily_status.setting} %>
+      <%= render :partial => 'daily_status_watchers/watchers', :locals => {:watched => @daily_status.setting} %>
     </div>
   <% end %>
+  <% if !@daily_status.setting.watchers.present? %>
+      <div class="daily_status_email_note"><b>Note:&nbsp;</b><%= l(:label_email_note) %></div>
+     <% else %>
+      <div class="daily_status_email_note" style="display:none;"><b>Note:&nbsp;</b><%= l(:label_email_note) %></div>
+     <% end %>
 <% end %>
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag 'daily_status', :plugin => 'redmine_daily_status' %>

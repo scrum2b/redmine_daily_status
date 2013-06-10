@@ -2,8 +2,8 @@ class DailyStatusesController < ApplicationController
   unloadable
   
   before_filter :find_project, :authorize
-  helper :watchers
-  include WatchersHelper
+  #helper :watchers
+  #include WatchersHelper
 
   def index
     @todays_status = @project.todays_status
@@ -34,6 +34,8 @@ class DailyStatusesController < ApplicationController
 
   def save
     @todays_status = @project.todays_status || @project.daily_statuses.build
+
+    params[:daily_status][:author_id] = User.current.id # current user id
 
     if @todays_status.update_attributes params[:daily_status]
       flash[:notice] = l(:label_status_saved)

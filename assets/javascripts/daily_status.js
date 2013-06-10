@@ -55,3 +55,25 @@ function add_Class_To_Selected_Date()
   $('.ui-datepicker-calendar tr td a.ui-state-default.ui-state-highlight').removeClass('ui-state-highlight');
   $('.ui-datepicker-calendar tr td a.ui-state-default.ui-state-active').addClass('ui-state-highlight').removeClass('ui-state-active');
 }
+
+$('.ui-dialog').live("dialogclose", function(){
+  setTimeout(function(){ showHideText(); },300); 
+});
+$('.delete').live('click' , function() {
+  setTimeout(function(){ showHideText(); },300);  
+});
+
+function showHideText() {
+  if(parseInt($('#watchers > ul').length) > 0)
+  {
+    $('.daily_status_email_note').hide();
+    $('#project_members').hide();
+    $('#project_watchers').show();
+    
+  }else if(parseInt($('#watchers > ul').length) <= 0)
+  {
+    $('.daily_status_email_note').show();
+    $('#project_members').show();
+    $('#project_watchers').hide();    
+  }
+}

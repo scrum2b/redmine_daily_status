@@ -14,6 +14,12 @@
     float:left;
     color:black;
 }
+.daily_status_email_note {
+    padding-bottom:10px;
+    padding-right:2px;
+    float:left;
+    color:black;
+}
 .daily_status_current_week {
     list-style: none;
     padding: 2px;
