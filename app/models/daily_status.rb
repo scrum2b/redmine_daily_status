@@ -34,7 +34,7 @@ class DailyStatus < ActiveRecord::Base
                             
 
   def email
-    if !setting.watcher_recipients.nil?
+    if !(setting.watcher_recipients).empty?
       recipients = setting.watcher_recipients
     else
       recipients = project.members.collect {|m| m.user}.collect(&:mail)      
