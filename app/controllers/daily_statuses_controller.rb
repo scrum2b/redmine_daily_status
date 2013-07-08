@@ -56,8 +56,8 @@ class DailyStatusesController < ApplicationController
   private
 
   def find_project
-    id = params[:project_id].to_s.to_i
-    return @project = Project.where(:id => params[:project_id]).first if id > 0
-    @project = Project.where(:identifier => params[:project_id]).first
+    #id = params[:project_id].to_s.to_i
+    #return @project = Project.where(:id => params[:project_id]).first if id > 0
+    return @project = Project.where(:identifier => params[:project_id]).first
   end
 end
