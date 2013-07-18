@@ -15,3 +15,5 @@ de:
   label_add_update_today_status: "Status für heute melden"
   label_edit_today_status: "Status für heute aktualisieren"
   label_invalid_date_format: "Ungültiges Datumsformat.Bitte im Format JJJJ-MM-TT angeben."
+  label_email_note: "Der Status wird an alle Projetmitglieder versendet"
+  manage_daily_status: Beobachter hinzufügen
