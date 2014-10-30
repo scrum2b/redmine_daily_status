@@ -19,7 +19,9 @@ A small project of team  size 2-5 or may be more, where team lead does send dail
 To install the Daily Status, execute the following commands from the plugin directory of your redmine directory:
 
     git clone https://github.com/gs-lab/redmine_daily_status
-    rake redmine:plugins:migrate NAME=redmine_daily_status
+    RAILS_ENV=production bundle exec rake redmine:plugins:migrate NAME=redmine_daily_status
+
+Note: you should specify correct Rails environment.
 
 After the plugin is installed and the db migration completed, you will
 need to restart redmine for the plugin to be available.
