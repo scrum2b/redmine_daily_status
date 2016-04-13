@@ -1,9 +1,11 @@
 require 'daily_status_mailer'
 class DailyStatus < ActiveRecord::Base
   unloadable
-  default_scope order('created_at desc')
+  default_scope { order(created_at: 'desc') }
+
   belongs_to :project
   belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
+  attr_accessible :daily_status, :content, :is_email_sent, :author_id
   validates_presence_of :content
 
   def setting
@@ -23,14 +25,14 @@ class DailyStatus < ActiveRecord::Base
                                   }
                                 }
 
-  acts_as_activity_provider :timestamp => "#{table_name}.created_at",
-                            :find_options => {
-                                                :include => [:project, :author],
-                                                :select => "#{table_name}.*",
-                                                :conditions => "#{table_name}.is_email_sent=true"
-                                              },
-                            :permission => :view_daily_status,
-                            :author_key => :author_id
+  # acts_as_activity_provider :timestamp => "#{table_name}.created_at",
+  #                           :find_options => {
+  #                                               :include => [:project, :author],
+  #                                               :select => "#{table_name}.*",
+  #                                               :conditions => "#{table_name}.is_email_sent=true"
+  #                                             },
+  #                           :permission => :view_daily_status,
+  #                           :author_key => :author_id
                             
 
   def email
